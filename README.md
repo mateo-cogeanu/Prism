@@ -1,4 +1,4 @@
-# [Prism Video Encoder](https://github.com/YOUR_USERNAME/Prism-Video-Encoder)
+# [Prism Video Encoder](https://htmlpreview.github.io/?https://github.com/mateo-cogeanu/Prism/blob/main/Prism_encoder_decoder.html)
 
 Prism Video Encoder is a simple web-based tool that converts video files into a custom `.pri` binary format. This tool enables users to read video files as raw binary data and save them with a `.pri` extension, making it easy to store and manage video content in a proprietary format. The tool is built using HTML, JavaScript, and the `FileReader` API for efficient file handling, all running in the browser with no need for server-side processing.
 
@@ -21,7 +21,7 @@ Prism Video Encoder is a simple web-based tool that converts video files into a 
 5. Use the `.pri` file as part of your custom video workflow.
 
 ## Demo
-You can try out the encoder directly by visiting the GitHub repository: [Prism Video Encoder Demo](https://github.com/YOUR_USERNAME/Prism-Video-Encoder).
+You can try out the encoder directly by visiting the GitHub repository: [Prism Video Encoder Demo](https://htmlpreview.github.io/?https://github.com/mateo-cogeanu/Prism/blob/main/Prism_encoder_decoder.html).
 
 ## Technologies Used
 - **HTML5**: Provides the structure for the user interface.
