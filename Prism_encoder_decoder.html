@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prism Video Encoder/Decoder</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #00b5e2;
+        }
+
+        /* Tab container */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px 5px 0 0;
+            transition: background-color 0.3s;
+        }
+
+        .tab:hover {
+            background-color: #444;
+        }
+
+        .active-tab {
+            background-color: #00b5e2;
+            color: #000;
+        }
+
+        /* Tab content */
+        .tab-content {
+            display: none;
+        }
+
+        .active-content {
+            display: block;
+        }
+
+        /* Input and button styling */
+        input[type="file"] {
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        button {
+            background-color: #00b5e2;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0197b4;
+        }
+
+        video {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            border: 2px solid #00b5e2;
+            border-radius: 8px;
+        }
+
+        #status {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #00b5e2;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Prism Video Encoder/Decoder</h1>
+
+<!-- Tab navigation -->
+<div class="tabs">
+    <button class="tab active-tab" onclick="switchTab(0)">Encoder</button>
+    <button class="tab" onclick="switchTab(1)">Decoder</button>
+</div>
+
+<!-- Tab content -->
+<div id="encoderTab" class="tab-content active-content">
+    <h2>Prism Video Encoder</h2>
+    <input type="file" id="videoFile" accept="video/*">
+    <video id="videoPlayer" controls></video>
+    <button id="encodeButton">Encode to Prism (.pri)</button>
+    <div id="encoderStatus"></div>
+</div>
+
+<div id="decoderTab" class="tab-content">
+    <h2>Prism Video Decoder</h2>
+    <input type="file" id="priFile" accept=".pri">
+    <video id="decodedVideoPlayer" controls></video>
+    <div id="decoderStatus"></div>
+</div>
+
+<script>
+    // Tab switching logic
+    function switchTab(tabIndex) {
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Remove active class from all tabs and tab contents
+        tabs.forEach(tab => tab.classList.remove('active-tab'));
+        tabContents.forEach(content => content.classList.remove('active-content'));
+
+        // Add active class to selected tab and content
+        tabs[tabIndex].classList.add('active-tab');
+        tabContents[tabIndex].classList.add('active-content');
+    }
+
+    // Encoder Logic
+    const videoFileInput = document.getElementById('videoFile');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const encodeButton = document.getElementById('encodeButton');
+    const encoderStatusDiv = document.getElementById('encoderStatus');
+
+    // Load the video file into the video player
+    videoFileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const videoURL = URL.createObjectURL(file);
+            videoPlayer.src = videoURL;
+        }
+    });
+
+    // Simulate video encoding process
+    encodeButton.addEventListener('click', () => {
+        const file = videoFileInput.files[0];
+        if (file) {
+            encoderStatusDiv.textContent = 'Encoding...';
+
+            // Read the file's binary data (simulating encoding)
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const encodedData = e.target.result;
+
+                // Simulate saving to .pri file
+                const blob = new Blob([encodedData], { type: 'video/prism' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = file.name.replace(/\.[^/.]+$/, '') + '.pri';
+
+                // Trigger the download
+                link.click();
+                encoderStatusDiv.textContent = 'Encoding Complete! Downloading Prism file...';
+            };
+            reader.readAsArrayBuffer(file); // Read the file as binary
+        } else {
+            encoderStatusDiv.textContent = 'Please select a video file to encode.';
+        }
+    });
+
+    // Decoder Logic
+    const priFileInput = document.getElementById('priFile');
+    const decodedVideoPlayer = document.getElementById('decodedVideoPlayer');
+    const decoderStatusDiv = document.getElementById('decoderStatus');
+
+    // Load and decode .pri file
+    priFileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file && file.name.endsWith('.pri')) {
+            decoderStatusDiv.textContent = 'Decoding...';
+
+            // Read the .pri file and simulate playing the video
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const data = e.target.result;
+
+                // Simulate decoding the file (Pretend it's an mp4)
+                const videoBlob = new Blob([data], { type: 'video/mp4' });
+                const videoURL = URL.createObjectURL(videoBlob);
+                decodedVideoPlayer.src = videoURL;
+
+                // Indicate decoding is complete
+                decoderStatusDiv.textContent = 'Decoding Complete! Enjoy your video!';
+            };
+            reader.readAsArrayBuffer(file); // Read the .pri file as binary
+        } else {
+            decoderStatusDiv.textContent = 'Please select a valid .pri video file to decode.';
+        }
+    });
+</script>
+
+</body>
+</html>
